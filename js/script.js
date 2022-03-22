@@ -16,43 +16,53 @@
 
         for (const task of tasks) {
             htmlString += `
-            <li${task.done ?  " style=\"text-decoration: line-through\"" : ""}>
+            <li${task.done ? " style=\"text-decoration: line-through\"" : ""}
+            >
+            <button class="js-remove">Usuń</button>
                 ${task.content}
             </li>
             `;
         }
 
-            document.querySelector(".js-tasks").innerHTML = htmlString;
-        };
+        document.querySelector(".js-tasks").innerHTML = htmlString;
 
-        const addNewTask = (newTaskContent) => {
-            tasks.push({
-                content: newTaskContent,
+        const removeButtons = document.querySelectorAll(".js-remove");
 
-
+        removeButtons.forEach((removeButton, index) => {
+            removeButton.addEventListener("click", () => {
+                tasks.splice(index, 1);
+                render();
             });
+        });
+    };
 
-            render();
-        };
+    const addNewTask = (newTaskContent) => {
+        tasks.push({
+            content: newTaskContent,
 
-        const init = () => {
-            render();
+        });
 
-            const form = document.querySelector(".js-form");
+        render();
+    };
 
-            form.addEventListener("submit", (event) => {
-                event.preventDefault();
+    const init = () => {
+        render();
 
-                const newTaskContent = document.querySelector(".js-newTask").value.trim();
+        const form = document.querySelector(".js-form");
 
-                if (newTaskContent === "") {
-                    return;
-                }
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
 
-                addNewTask(newTaskContent);
-            });
-        };
+            const newTaskContent = document.querySelector(".js-newTask").value.trim();
 
-        init();
+            if (newTaskContent === "") {
+                return;
+            }
 
-    }
+            addNewTask(newTaskContent);
+        });
+    };
+
+    init();
+
+}
